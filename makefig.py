@@ -19,22 +19,29 @@ from   mpl_toolkits.mplot3d import Axes3D
 
 # Input files
 filein = [
-          ["Col Agnel (depuis Casteldelfino)"        ],
+          ["Col Agnel (depuis Casteldelfino)"                       ],
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
-          ["L'Alpe d'Huez (depuis Le Bourg-d'Oisans)"],
-          ["Andorre Arcalis (depuis Ordino)"         ],
-          ["Col d'Aubisque (depuis Argelès-Gazost)"  ],
-          ["Port de Balès (depuis Mauléon-Barousse)" ],
-          ["Plateau de Beille (depuis Les Cabannes)" ],
-          ["Col de la Biche (depuis Gignez)"         ],
-          ["Montée de Bisanne (depuis Villard-Sur-Doron)"],
-          ["Cime de la Bonette (depuis Saint-Etienne-de-Tinée)"],
-          ["Chamrousse (depuis Uriage-les-Bains)"]
+          ["L'Alpe d'Huez (depuis Le Bourg-d'Oisans)"               ],
+          ["Andorre Arcalis (depuis Ordino)"                        ],
+          ["Col d'Aubisque (depuis Argelès-Gazost)"                 ],
+          ["Port de Balès (depuis Mauléon-Barousse)"                ],
+          ["Plateau de Beille (depuis Les Cabannes)"                ],
+          ["Col de la Biche (depuis Gignez)"                        ],
+          ["Montée de Bisanne (depuis Villard-Sur-Doron)"           ],
+          ["Cime de la Bonette (depuis Saint-Etienne-de-Tinée)"     ],
+          ["Chamrousse (depuis Uriage-les-Bains)"                   ],
+          ["Mont du Chat (depuis Yenne)"                            ],
+          ["Col de la Croix-de-Fer (depuis Saint-Jean-de-Maurienne)"],
+          ["Finhaut-Émosson (depuis Gietroz)"                       ],
+          ["Col du Galibier (depuis le Col du Lautaret)"            ],
+          ["Col du Glandon (depuis le Barrage du Verney)"           ],
+          ["Plateau des Glières (depuis Le-Petit-Bornand-les-Glières)"],
+          ["Col du Grand Colombier (depuis Artemare)"               ],    
          ]
 
 # Colors
@@ -66,7 +73,7 @@ def difficulty_index(H, D, T):
     # H : altitude gain in meters
     # D : distance riden in meters
     # T : top altitude
-    out = (H*100/D)*4 + H**2/D + D/1000 
+    out = (H*100/D)*2 + H**2/D + D/1000 
     if T > 1000.0:
         out += (T-1000)/100
     return out
@@ -78,11 +85,9 @@ m = Basemap(llcrnrlon = -1.7 ,llcrnrlat = 41.3, urcrnrlon = 9.0 ,
             projection='lcc',lat_1=43.5, lat_2=45.3, lon_0 = 2.4,
             resolution ='c', area_thresh=1000.)
  
-print('TACHY')
-
 # Loop over files
     
-fig = plt.figure("figall", figsize = (32, 16))
+fig = plt.figure("figall", figsize = (32, 10))
 
 for file in enumerate(filein):
     id = file[0] + 1
@@ -162,19 +167,84 @@ for file in enumerate(filein):
         score = difficulty_index((z[-1] - z[0]), (d[-1] - d[0]) * 1000.0, z[-1])
         
         # Plots
-        plt.fill_between(d, z, color = colors[jf])
-        plt.ylim(0, 3000)
-        plt.xlim(0, d[-1])
-        plt.text(0, 0, str(np.round(np.mean(slope), 1)) + "% (" + str(np.round(np.max(slope))) + "%)")
-        plt.title(str(id) + ". " + f.split(" (")[0] + "\n" + str(np.round(score)))
+        #plt.fill_between(d, z, color = colors[jf])
+        plt.fill_between(d / d[-1], (z - z[0]) / (z[-1] - z[0]), color = colors[jf])
         
+        #plt.ylim(0, 3000)
+        #plt.xlim(0, 30)#d[-1])
+        
+        
+        
+        #plt.text(0, 0, str(np.round(np.mean(slope), 1)) + "% (" + str(np.round(np.max(slope))) + "%)")
+        plt.title(str(id) + " - " + f.split(" (")[0] + "\n", color = colors[jf])
+        
+        plt.text(0.92, 0.5,  str(int((z[-1] - z[0]))) + " m ", color = "white", rotation = 90, va = "center")
+        plt.text(0.5, 0.02, str(np.round(d[-1], 1)) + " km", color = "white", ha = "center")
+        plt.text(1.0, 1.0,  str(int(z[-1])) + " m", color = colors[jf], ha = "left")
+        plt.text(0.0, 0.0,  str(int(z[0])) + " m", color = colors[jf], ha = "right")
+        plt.text(0.7, 0.3,  str(np.round((z[-1] - z[0]) / 
+                                         ((d[-1] - d[0]) * 1000) * 100, 1)) + 
+            " %", rotation = 45, ha = "center", va = "center", color = "white")
+
+
+        # Plot road in box. Scale depending on the dimension that has the largest span.
+        # Box coordinates
+        x1, x2 = 0.00, 0.30
+        y1, y2 = 0.65, 0.95
+        
+        if np.abs(x[-1]) > np.abs(y[-1]):
+            # Scale factor: along x so that when divided by this number we have x2 - x1
+            scalef = np.abs(x[-1]) / (x2 - x1)
+        else:
+            scalef = np.abs(y[-1]) / (y2 - y1)
+        
+        # Make mean of data pass through mean of box. 
+        xx = (x1 + x2) / 2.0 + x / scalef - np.sign(x[-1] - x[0]) * (x2 - x1) / 2
+        yy = (y1 + y2) / 2.0 + y / scalef - np.sign(y[-1] - y[0]) * (y2 - y1) / 2       
+
+        ha, va = "center", "center"
+        if np.abs(xx[0] - x1) < 1e-6:
+            ha = "right"
+        if np.abs(xx[0] - x2) < 1e-6:
+            ha = "left"
+        if np.abs(yy[0] - y1) < 1e-6:
+            va = "top"
+        if np.abs(yy[0] - y2) < 1e-6:
+            va = "bottom"
+        # Initial point is set to upper left if final point is below and to the right, etc.
+#        if x[-1] > x[0] and y[-1] > y[0]:
+#            # route goes north east
+#            xx = x1 + (x - x[0]) * (x2 - x1) / (x[-1] - x[0])
+#            yy = y1 + (y - y[0]) * (y2 - y1) / (y[-1] - y[0])
+#        elif x[-1] > x[0] and y[-1] < y[0]:
+#            # route goes south east
+#            xx = x1 + (x - x[0]) * (x2 - x1) / (x[-1] - x[0])
+#            yy = y2 + (y - y[0]) * (y1 - y2) / (y[-1] - y[0])
+#        elif x[-1] < x[0] and y[-1] > y[0]:
+#            # route goes north west
+#            xx = x2 + (x - x[0]) * (x1 - x2) / (x[-1] - x[0])
+#            yy = y1 + (y - y[0]) * (y2 - y1) / (y[-1] - y[0])
+#        elif x[-1] < x[0] and y[-1] < y[0]:
+#            # route goes south west
+#            xx = x2 + (x - x[0]) * (x1 - x2) / (x[-1] - x[0])
+#            yy = y2 + (y - y[0]) * (y1 - y2) / (y[-1] - y[0])
+#        else:
+#            sys.exit("Case not known")
+        from_place = f.split(" (")[1].split(")")[0].split("depuis ")[1]
+        plt.text(xx[0], yy[0], "\n " + from_place + " \n", color = colors[jf], fontsize = 4, ha = ha, va = va)
+        plt.plot(xx, yy, lw = 1, color = colors[jf])
+        plt.scatter(xx[0], yy[0], 5, marker = "o", color = colors[jf], zorder = 1000)
+        plt.scatter(xx[-1], yy[-1], 10, marker = "o", color = "black", zorder = 1000)
+        plt.scatter(xx[-1], yy[-1], 5, marker = "o", color = "white", zorder = 1001)
+        plt.scatter(xx[-1], yy[-1], 1, marker = "o", color = "black", zorder = 1002)
+        plt.axis("off")
         plt.tight_layout()
     
         plt.subplot(2, 4, 8)
         xx, yy = m(lon[-1], lat[-1])
         plt.scatter(xx, yy, 50, colors[jf])
         plt.text(xx, yy, str(id), color = "white", ha = "center", va = "center")
- 
+        
 plt.subplot(2, 4, 8)           
 m.drawcoastlines(linewidth = 1)
 m.drawcountries(linewidth = 1)   
@@ -187,9 +257,9 @@ m.drawcountries(linewidth = 1)
 #m.drawcountries(linewidth = 1)
 
     
-plt.subplots_adjust(hspace = 0.2)
+plt.subplots_adjust(hspace = 0.3)
 plt.savefig("./figs/figall.png", dpi = 300)
-
+plt.savefig("./figs/figall.pdf"           )
     #plt.savefig("./figs/" + f[:-4] + ".pdf")
     
 #    plt.subplot(2, 2, 1)
