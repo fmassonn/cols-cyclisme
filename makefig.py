@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ET
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import pyglet
 from   mpl_toolkits.basemap import Basemap
 from   scipy import interpolate
 from   mpl_toolkits.mplot3d import Axes3D
@@ -19,7 +20,7 @@ from   mpl_toolkits.mplot3d import Axes3D
 
 # Input files
 filein = [
-          ["Col Agnel (depuis Casteldelfino)"                       ],
+          ["Col Agnel (depuis Casteldelfino)"                         ],
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
@@ -27,33 +28,78 @@ filein = [
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           ["L'Alpe d'Huez (depuis Le Bourg-d'Oisans)"               ],
-          ["Andorre Arcalis (depuis Ordino)"                        ],
-          ["Col d'Aubisque (depuis Argelès-Gazost)"                 ],
-          ["Port de Balès (depuis Mauléon-Barousse)"                ],
-          ["Plateau de Beille (depuis Les Cabannes)"                ],
-          ["Col de la Biche (depuis Gignez)"                        ],
-          ["Montée de Bisanne (depuis Villard-Sur-Doron)"           ],
-          ["Cime de la Bonette (depuis Saint-Etienne-de-Tinée)"     ],
-          ["Chamrousse (depuis Uriage-les-Bains)"                   ],
-          ["Mont du Chat (depuis Yenne)"                            ],
-          ["Col de la Croix-de-Fer (depuis Saint-Jean-de-Maurienne)"],
-          ["Finhaut-Émosson (depuis Gietroz)"                       ],
-          ["Col du Galibier (depuis le Col du Lautaret)"            ],
-          ["Col du Glandon (depuis le Barrage du Verney)"           ],
+          ["Andorre Arcalis (depuis Ordino)"                          ],
+          ["Col d'Aubisque (depuis Argelès-Gazost)"                   ],
+          ["Port de Balès (depuis Mauléon-Barousse)"                  ],
+          ["Plateau de Beille (depuis Les Cabannes)"                  ],
+          ["Col de la Biche (depuis Gignez)"                          ],
+          ["Montée de Bisanne (depuis Villard-Sur-Doron)"             ],
+          ["Cime de la Bonette (depuis Saint-Etienne-de-Tinée)"       ],
+          ["Chamrousse (depuis Uriage-les-Bains)"                     ],
+          ["Mont du Chat (depuis Yenne)"                              ],
+          ["Col de la Croix-de-Fer (depuis Saint-Jean-de-Maurienne)"  ],
+          ["Finhaut-Émosson (depuis Gietroz)"                         ],
+          ["Col du Galibier (depuis le Col du Lautaret)"              ],
+          ["Col du Glandon (depuis le Barrage du Verney)"             ],
           ["Plateau des Glières (depuis Le-Petit-Bornand-les-Glières)"],
-          ["Col du Grand Colombier (depuis Artemare)"               ],    
+          ["Col du Grand Colombier (depuis Artemare)"                 ], 
+          ["Col du Grand-Saint-Bernard (depuis Sembrancher)"          ],
+          ["Col de Granon (depuis Saint-Chaffrey)"                    ],
+          ["Hautacam (depuis Argelès-Gazost)"                         ],
+          ["Col de l'Iseran (depuis Lanslebourg-Mont-Cenis)"          ],
          ]
 
 # Colors
-colors = [[ccc / 255 for ccc in cc] for cc in 
-          [
-           [4  , 139, 154],
-           [170, 240, 209],
-           [207, 160, 233],
-          ]
-         ]
 
-colors = [np.random.random(3) for i in range(len(filein))]
+colors = [ "#F3D1DC",
+           "#F6A7C1",
+           "#FDCF76",   
+           "#B16E4B",
+           "#89AEB2",
+           "#97F2F3",
+           "#F1E0B0",
+           "#F1CDB0",
+           "#E7CFC8",
+           "#D2A3A9",
+           "#E6DCE5",
+           "#EBC3C1",
+           "#ECAD8F",
+           "#AF6E4E",
+           "#C8B4BA",
+           "#F3BBD3",
+           "#C1CD97",
+           "#E18D96",
+           "#909090",
+           "#38908F",
+           "#B2EBE0",
+           "#5E96AE",
+           "#FFBFA3",
+           "#E08963",
+           "#70AE98",
+           "#ECBE7A",
+           "#E58B88",
+           "#9DABDD",
+           "#D9EFFC",
+           "#F9E1E0",
+           "#FEADB9",
+           "#BC85A3",
+           "#9799BA",
+           "#BC85A3",
+           "#ADDDCE",
+           "#70AE98",
+           "#E6B655",
+           "#F0A35E",
+           "#CA7E8D",
+           "#8AC0DE",
+           "#F05CD5",
+           "#F5C9B2",
+         ]
+#colors = [np.random.random(3) for i in range(len(filein))]
+
+# Font stuff
+pyglet.font.add_file('./fonts/Titillium-Light.otf')
+font = pyglet.font.load("Titillium")
+
 # Define projection
 def projection(lon, lat):
     lon = np.array(lon)
@@ -79,16 +125,14 @@ def difficulty_index(H, D, T):
     return out
 
 # Projection for final map
-
 m = Basemap(llcrnrlon = -1.7 ,llcrnrlat = 41.3, urcrnrlon = 9.0 ,
             urcrnrlat = 48.8,
             projection='lcc',lat_1=43.5, lat_2=45.3, lon_0 = 2.4,
-            resolution ='c', area_thresh=1000.)
+            resolution ='f', area_thresh=1000.)
  
 # Loop over files
     
-fig = plt.figure("figall", figsize = (32, 10))
-
+fig = plt.figure("figall", figsize = (40, 16))
 for file in enumerate(filein):
     id = file[0] + 1
     jf = file[0]
@@ -176,15 +220,23 @@ for file in enumerate(filein):
         
         
         #plt.text(0, 0, str(np.round(np.mean(slope), 1)) + "% (" + str(np.round(np.max(slope))) + "%)")
-        plt.title(str(id) + " - " + f.split(" (")[0] + "\n", color = colors[jf])
+        plt.title(str(id) + "\n" + f.split(" (")[0] + "\n", color = colors[jf], 
+                      fontname = "Titillium")
         
-        plt.text(0.92, 0.5,  str(int((z[-1] - z[0]))) + " m ", color = "white", rotation = 90, va = "center")
-        plt.text(0.5, 0.02, str(np.round(d[-1], 1)) + " km", color = "white", ha = "center")
-        plt.text(1.0, 1.0,  str(int(z[-1])) + " m", color = colors[jf], ha = "left")
-        plt.text(0.0, 0.0,  str(int(z[0])) + " m", color = colors[jf], ha = "right")
+        plt.text(0.92, 0.5,  str(int((z[-1] - z[0]))) + " m ", 
+                 color = "white", rotation = 90, va = "center", fontname = "Titillium")
+        plt.text(0.5, 0.02, str(np.round(d[-1], 1)) +
+                 " km", color = "white", ha = "center", fontname = "Titillium")
+        plt.text(1.0, 1.0,  " " + str(int(z[-1])) + " m", 
+                 color = colors[jf], ha = "left", fontname = "Titillium")
+        plt.text(0.0, 0.0,  str(int(z[0])) + " m ", 
+                 color = colors[jf], ha = "right", fontname = "Titillium")
         plt.text(0.7, 0.3,  str(np.round((z[-1] - z[0]) / 
                                          ((d[-1] - d[0]) * 1000) * 100, 1)) + 
-            " %", rotation = 45, ha = "center", va = "center", color = "white")
+            " %", rotation = 45, ha = "center", 
+            va = "center", color = "white", fontname = "Titillium")
+        plt.text(1.0, 0.0, str(int(round(score))), color = "white", fontname = "Titillium", 
+                 ha = "right", va = "bottom")
 
 
         # Plot road in box. Scale depending on the dimension that has the largest span.
@@ -211,27 +263,10 @@ for file in enumerate(filein):
             va = "top"
         if np.abs(yy[0] - y2) < 1e-6:
             va = "bottom"
-        # Initial point is set to upper left if final point is below and to the right, etc.
-#        if x[-1] > x[0] and y[-1] > y[0]:
-#            # route goes north east
-#            xx = x1 + (x - x[0]) * (x2 - x1) / (x[-1] - x[0])
-#            yy = y1 + (y - y[0]) * (y2 - y1) / (y[-1] - y[0])
-#        elif x[-1] > x[0] and y[-1] < y[0]:
-#            # route goes south east
-#            xx = x1 + (x - x[0]) * (x2 - x1) / (x[-1] - x[0])
-#            yy = y2 + (y - y[0]) * (y1 - y2) / (y[-1] - y[0])
-#        elif x[-1] < x[0] and y[-1] > y[0]:
-#            # route goes north west
-#            xx = x2 + (x - x[0]) * (x1 - x2) / (x[-1] - x[0])
-#            yy = y1 + (y - y[0]) * (y2 - y1) / (y[-1] - y[0])
-#        elif x[-1] < x[0] and y[-1] < y[0]:
-#            # route goes south west
-#            xx = x2 + (x - x[0]) * (x1 - x2) / (x[-1] - x[0])
-#            yy = y2 + (y - y[0]) * (y1 - y2) / (y[-1] - y[0])
-#        else:
-#            sys.exit("Case not known")
+
         from_place = f.split(" (")[1].split(")")[0].split("depuis ")[1]
-        plt.text(xx[0], yy[0], "\n " + from_place + " \n", color = colors[jf], fontsize = 4, ha = ha, va = va)
+        plt.text(xx[0], yy[0], "\n " + from_place + " \n", color = colors[jf], 
+                 fontsize = 4, ha = ha, va = va, fontname = "Titillium")
         plt.plot(xx, yy, lw = 1, color = colors[jf])
         plt.scatter(xx[0], yy[0], 5, marker = "o", color = colors[jf], zorder = 1000)
         plt.scatter(xx[-1], yy[-1], 10, marker = "o", color = "black", zorder = 1000)
@@ -242,22 +277,25 @@ for file in enumerate(filein):
     
         plt.subplot(2, 4, 8)
         xx, yy = m(lon[-1], lat[-1])
-        plt.scatter(xx, yy, 50, colors[jf])
-        plt.text(xx, yy, str(id), color = "white", ha = "center", va = "center")
+        plt.scatter(xx, yy, 100, colors[jf], zorder = 999)
+        plt.text(xx, yy, str(id), color = "white", ha = "center", va = "center", 
+                 zorder = 1000, fontname = "Titillium")
         
-plt.subplot(2, 4, 8)           
+plt.subplot(2, 4, 8)        
+m.drawmapboundary(fill_color= "#779ecb", zorder = -1)
+m.fillcontinents(color = "#fff8dc", lake_color = "#779ecb", zorder = 0)
 m.drawcoastlines(linewidth = 1)
 m.drawcountries(linewidth = 1)   
-#
-#m = Basemap(llcrnrlon = -1.7 ,llcrnrlat = 41.3, urcrnrlon = 9.0 ,
-#            urcrnrlat = 48.8,
-#            projection='lcc',lat_1=43.5, lat_2=45.3, lon_0 = 2.4,
-#            resolution ='l', area_thresh=1000.)
-#m.drawcoastlines(linewidth = 1)
-#m.drawcountries(linewidth = 1)
+
 
     
 plt.subplots_adjust(hspace = 0.3)
+plt.suptitle( "Les " + str(round(len(filein)))  + " ascensions \"Hors Catégorie\" du Tour de France", 
+             fontsize = 60, fontname = "Titillium", color = [0.3, 0.3, 0.3])
+plt.subplots_adjust(top = 0.78)
+
+
+#plt.text(0.0, 0.0, "T", fontsize = 60, fontname = "Titillium")
 plt.savefig("./figs/figall.png", dpi = 300)
 plt.savefig("./figs/figall.pdf"           )
     #plt.savefig("./figs/" + f[:-4] + ".pdf")
