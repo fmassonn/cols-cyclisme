@@ -17,7 +17,13 @@ from   scipy import interpolate
 from   mpl_toolkits.mplot3d import Axes3D
 
 
-
+# Todo
+# -classer
+# - backer couleurs inadaptées
+# -police
+# -titre
+# limites inset?
+# une carte par col
 # Input files
 filein = [
           ["Col Agnel (depuis Casteldelfino)"                         ],
@@ -27,7 +33,7 @@ filein = [
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
-          ["L'Alpe d'Huez (depuis Le Bourg-d'Oisans)"               ],
+          ["L'Alpe d'Huez (depuis Le Bourg-d'Oisans)"                 ],
           ["Andorre Arcalis (depuis Ordino)"                          ],
           ["Col d'Aubisque (depuis Argelès-Gazost)"                   ],
           ["Port de Balès (depuis Mauléon-Barousse)"                  ],
@@ -47,6 +53,18 @@ filein = [
           ["Col de Granon (depuis Saint-Chaffrey)"                    ],
           ["Hautacam (depuis Argelès-Gazost)"                         ],
           ["Col de l'Iseran (depuis Lanslebourg-Mont-Cenis)"          ],
+          ["Col d'Izoard (depuis Montbardon)"                         ],
+          ["Col de Joux-Plane (depuis Samoëns)"                       ],
+          ["La Plagne (depuis Aime)"                                  ],
+          ["Port de Larrau (depuis l'Auberge Logibar)"                ],
+          ["La Ruchère en Chartreuse (depuis Saint-Christophe-sur-Guiers)"],
+          ["Col de la Lombarde (depuis Pratolungo)"                   ],
+          ["Luz-Ardiden (depuis Luz-Saint-Sauveur)"                   ],
+          ["Col de la Madeleine (depuis Feissonnet)"                  ],
+          ["Col du Mont-Cenis (depuis Susa)"                          ],
+          ["Port de Pailhères (depuis Usson-les-Bains)"               ],
+          ["Pla d'Adet (depuis Vignec)"                               ],
+          
          ]
 
 # Colors
@@ -124,22 +142,14 @@ def difficulty_index(H, D, T):
         out += (T-1000)/100
     return out
 
-# Projection for final map
-m = Basemap(llcrnrlon = -1.7 ,llcrnrlat = 41.3, urcrnrlon = 9.0 ,
-            urcrnrlat = 48.8,
-            projection='lcc',lat_1=43.5, lat_2=45.3, lon_0 = 2.4,
-            resolution ='f', area_thresh=1000.)
- 
 # Loop over files
     
-fig = plt.figure("figall", figsize = (40, 16))
+fig = plt.figure("figall", figsize = (20, 20))
 for file in enumerate(filein):
     id = file[0] + 1
     jf = file[0]
-    if jf + 1 >= 34:
-        plt.subplot(4, 12, jf + 4)
-    else:
-        plt.subplot(4, 12, jf + 1)
+    plt.subplot(7, 6, id)
+
 
     if not os.path.exists("./data/" + file[1][0] + ".gpx"):
         print("hello")
@@ -220,7 +230,7 @@ for file in enumerate(filein):
         
         
         #plt.text(0, 0, str(np.round(np.mean(slope), 1)) + "% (" + str(np.round(np.max(slope))) + "%)")
-        plt.title(str(id) + "\n" + f.split(" (")[0] + "\n", color = colors[jf], 
+        plt.title(f.split(" (")[0] + "\n", color = colors[jf], 
                       fontname = "Titillium")
         
         plt.text(0.92, 0.5,  str(int((z[-1] - z[0]))) + " m ", 
@@ -275,24 +285,12 @@ for file in enumerate(filein):
         plt.axis("off")
         plt.tight_layout()
     
-        plt.subplot(2, 4, 8)
-        xx, yy = m(lon[-1], lat[-1])
-        plt.scatter(xx, yy, 100, colors[jf], zorder = 999)
-        plt.text(xx, yy, str(id), color = "white", ha = "center", va = "center", 
-                 zorder = 1000, fontname = "Titillium")
-        
-plt.subplot(2, 4, 8)        
-m.drawmapboundary(fill_color= "#779ecb", zorder = -1)
-m.fillcontinents(color = "#fff8dc", lake_color = "#779ecb", zorder = 0)
-m.drawcoastlines(linewidth = 1)
-m.drawcountries(linewidth = 1)   
-
-
-    
-plt.subplots_adjust(hspace = 0.3)
+     
+   
+plt.subplots_adjust(hspace = 0.5)
 plt.suptitle( "Les " + str(round(len(filein)))  + " ascensions \"Hors Catégorie\" du Tour de France", 
              fontsize = 60, fontname = "Titillium", color = [0.3, 0.3, 0.3])
-plt.subplots_adjust(top = 0.78)
+plt.subplots_adjust(top = 0.88)
 
 
 #plt.text(0.0, 0.0, "T", fontsize = 60, fontname = "Titillium")

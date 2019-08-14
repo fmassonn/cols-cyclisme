@@ -6,12 +6,17 @@ How to add a new climb?
   3. Place in ./data/ 
 
   
+Routes are chosen starting from the lowest point (river) nearby or according to websites. 
  
 The routes are the ones of the last climb from the Tour de France.
 
+Paste colors: https://visme.co/blog/pastel-colors/
 
-Col Agnel		https://fr.m.wikipedia.org/wiki/Tour_de_France_2011
+The distances in Strava and Google Maps are in much better agreement with one another than the distances of Cols-cyclisme and any of the two.
 
+Col Agnel		
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2011
+	https://www.cols-cyclisme.com/queyras/italie/col-agnel-depuis-casteldelfino-c117.htm
 L'Alpe d'Huez	
 	https://fr.m.wikipedia.org/wiki/12e_%C3%A9tape_du_Tour_de_France_2018
 	https://www.climbbybike.com/climb.asp?Col=Alpe-dHuez&qryMountainID=5
@@ -36,7 +41,51 @@ Montée de Bisanne
 	https://www.climbbybike.com/climb.asp?Col=Signal-de-Bisanne&qryMountainID=7134
 Cime de la Bonette
 	https://fr.m.wikipedia.org/wiki/16e_%C3%A9tape_du_Tour_de_France_2008
-	
 Chamrousse
 	https://fr.m.wikipedia.org/wiki/13e_%C3%A9tape_du_Tour_de_France_2014
 	https://www.cols-cyclisme.com/belledonne/france/roche-beranger-station-de-chamrousse-depuis-uriage-les-bains-c130.htm
+Mont du Chat
+	https://fr.m.wikipedia.org/wiki/9e_%C3%A9tape_du_Tour_de_France_2017
+	https://www.cols-cyclisme.com/jura/france/mont-du-chat-depuis-yenne-c143.htm
+Col de la Croix-de-Fer
+	https://fr.m.wikipedia.org/wiki/12e_%C3%A9tape_du_Tour_de_France_2018
+	https://www.cols-cyclisme.com/arves-et-grandes-rousses/france/col-de-la-croix-de-fer-depuis-saint-jean-de-maurienne-c40.htm
+Finhaut-Émosson
+	https://fr.m.wikipedia.org/wiki/17e_%C3%A9tape_du_Tour_de_France_2016
+	https://www.cols-cyclisme.com/massif-du-mont-blanc/suisse/barrage-d-emosson-depuis-le-chatelard-c727.htm
+Col du Galibier
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2019
+	https://www.cols-cyclisme.com/arves-et-grandes-rousses/france/col-du-galibier-depuis-col-du-lautaret-c36.htm
+Col du Glandon
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2015
+	https://www.cols-cyclisme.com/arves-et-grandes-rousses/france/col-du-glandon-depuis-barrage-du-verney-c45.htm
+Plateau des Glières
+	https://fr.m.wikipedia.org/wiki/10e_%C3%A9tape_du_Tour_de_France_2018
+Col du Grand Colombier
+	https://fr.m.wikipedia.org/wiki/9e_%C3%A9tape_du_Tour_de_France_2017
+	https://www.cols-cyclisme.com/jura/france/col-du-grand-colombier-depuis-artemare-via-virieu-le-petit-c155.htm
+Col du Grand-Saint-Bernard
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2009
+	https://www.cols-cyclisme.com/alpes-valaisannes/suisse/col-du-grand-saint-bernard-depuis-sembrancher-c146.htm
+Col du Granon
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_1986
+	https://www.cols-cyclisme.com/cerces/france/col-du-granon-depuis-briancon-c122.htm
+Hautacam
+	https://fr.wikipedia.org/wiki/18e_%C3%A9tape_du_Tour_de_France_2014
+	https://www.cols-cyclisme.com/pyrenees-centrales/france/station-d-hautacam-depuis-argeles-gazost-c58.htm
+Col de l'Iseran
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2019
+	https://www.cols-cyclisme.com/vanoise/france/col-de-l-iseran-depuis-lanslebourg-c104.htm
+Col d'Izoard
+	https://fr.m.wikipedia.org/wiki/18e_%C3%A9tape_du_Tour_de_France_2019
+	https://www.climbbybike.com/climbs_selection.asp?MountainID=6051&Mountainname=Col%20de%20lIzoard
+	https://www.cols-cyclisme.com/queyras/france/col-de-l-izoard-depuis-gorges-du-guil-d902-d947-c46.htm
+Col de Joux-Plane
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2016
+	https://www.climbbybike.com/climb.asp?Col=Col-de-Joux-Plane&qryMountainID=6018
+La Plagne
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2002
+	https://www.cols-cyclisme.com/vanoise/france/station-de-la-plagne-depuis-aime-c38.htm
+	https://www.climbbybike.com/climb.asp?Col=La-Plagne&qryMountainID=6879
+
+	
