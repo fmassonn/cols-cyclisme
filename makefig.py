@@ -64,7 +64,16 @@ filein = [
           ["Col du Mont-Cenis (depuis Susa)"                          ],
           ["Port de Pailhères (depuis Usson-les-Bains)"               ],
           ["Pla d'Adet (depuis Vignec)"                               ],
-          
+          ["Col de Portet (depuis Vignec)"                            ],
+          ["Col du Pré (depuis Beaufort)"                             ],
+          ["Puy de Dôme (depuis Clermont-Ferrand)"                    ],
+          ["Semnoz (depuis Quintal)"                                  ],
+          ["Col de Soudet (depuis Arette)"                            ],
+          ["Col du Soulor (depuis Ferrières)"                         ],
+          ["Superbagnères (depuis Bagnères-de-Luchon)"                ],
+          ["Col du Tourmalet (depuis Luz-Saint-Sauveur)"              ],
+          ["Val Thorens (depuis Moutiers)"                            ],
+          ["Mont Ventoux (depuis Bédoin)"                             ],          
          ]
 
 # Colors
@@ -115,8 +124,13 @@ colors = [ "#F3D1DC",
 #colors = [np.random.random(3) for i in range(len(filein))]
 
 # Font stuff
-pyglet.font.add_file('./fonts/Titillium-Light.otf')
-font = pyglet.font.load("Titillium")
+fontfile = "ERASLGHT"
+fontname = "Eras Light ITC"
+
+#fontfile = "Existence-Light"
+#fontname = "Existence Light"
+pyglet.font.add_file("./fonts/" + fontfile + ".ttf")
+font = pyglet.font.load(fontname)
 
 # Define projection
 def projection(lon, lat):
@@ -142,6 +156,19 @@ def difficulty_index(H, D, T):
         out += (T-1000)/100
     return out
 
+# Projection for map inset
+m = Basemap(llcrnrlon = -4 ,llcrnrlat = 41, urcrnrlon = 12.0 ,
+            urcrnrlat = 47,
+            projection='lcc',lat_1=43.5, lat_2=45.3, lon_0 = 2.4,
+            resolution ='h', area_thresh=1000.)
+
+# Get coastlines and countries
+coast =      m.drawcoastlines()
+coast_coor = coast.get_segments()
+count =      m.drawcountries()
+count_coor = count.get_segments()
+
+plt.close("all")
 # Loop over files
     
 fig = plt.figure("figall", figsize = (20, 20))
@@ -231,28 +258,26 @@ for file in enumerate(filein):
         
         #plt.text(0, 0, str(np.round(np.mean(slope), 1)) + "% (" + str(np.round(np.max(slope))) + "%)")
         plt.title(f.split(" (")[0] + "\n", color = colors[jf], 
-                      fontname = "Titillium")
+                      fontname = fontname)
         
         plt.text(0.92, 0.5,  str(int((z[-1] - z[0]))) + " m ", 
-                 color = "white", rotation = 90, va = "center", fontname = "Titillium")
+                 color = "white", rotation = 90, va = "center", fontname = fontname)
         plt.text(0.5, 0.02, str(np.round(d[-1], 1)) +
-                 " km", color = "white", ha = "center", fontname = "Titillium")
+                 " km", color = "white", ha = "center", fontname = fontname)
         plt.text(1.0, 1.0,  " " + str(int(z[-1])) + " m", 
-                 color = colors[jf], ha = "left", fontname = "Titillium")
+                 color = colors[jf], ha = "left", fontname = fontname)
         plt.text(0.0, 0.0,  str(int(z[0])) + " m ", 
-                 color = colors[jf], ha = "right", fontname = "Titillium")
+                 color = colors[jf], ha = "right", fontname = fontname)
         plt.text(0.7, 0.3,  str(np.round((z[-1] - z[0]) / 
                                          ((d[-1] - d[0]) * 1000) * 100, 1)) + 
             " %", rotation = 45, ha = "center", 
-            va = "center", color = "white", fontname = "Titillium")
-        plt.text(1.0, 0.0, str(int(round(score))), color = "white", fontname = "Titillium", 
-                 ha = "right", va = "bottom")
-
+            va = "center", color = "white", fontname = fontname)
+        
 
         # Plot road in box. Scale depending on the dimension that has the largest span.
         # Box coordinates
-        x1, x2 = 0.00, 0.30
-        y1, y2 = 0.65, 0.95
+        x1, x2 = 0.3, 0.60
+        y1, y2 = 0.55, 0.85
         
         if np.abs(x[-1]) > np.abs(y[-1]):
             # Scale factor: along x so that when divided by this number we have x2 - x1
@@ -276,55 +301,58 @@ for file in enumerate(filein):
 
         from_place = f.split(" (")[1].split(")")[0].split("depuis ")[1]
         plt.text(xx[0], yy[0], "\n " + from_place + " \n", color = colors[jf], 
-                 fontsize = 4, ha = ha, va = va, fontname = "Titillium")
+                 fontsize = 4, ha = ha, va = va, fontname = fontname)
         plt.plot(xx, yy, lw = 1, color = colors[jf])
         plt.scatter(xx[0], yy[0], 5, marker = "o", color = colors[jf], zorder = 1000)
         plt.scatter(xx[-1], yy[-1], 10, marker = "o", color = "black", zorder = 1000)
         plt.scatter(xx[-1], yy[-1], 5, marker = "o", color = "white", zorder = 1001)
         plt.scatter(xx[-1], yy[-1], 1, marker = "o", color = "black", zorder = 1002)
+        
+        
+        # Draw map and location
+        def map_coordinates(x, y, x1, x2, y1, y2, minx, maxx, miny, maxy):
+                xx = x1 + (x - minx) * (x2 - x1) / (maxx - minx)
+                yy = y1 + (y - miny) * (y2 - y1) / (maxy - miny)
+                return xx, yy
+        x1 = 0.0
+        x2 = 0.2
+        y1 = 0.4
+        y2 = 0.6
+        minx = np.min(np.vstack(coast_coor)[:, 0])
+        maxx = np.max(np.vstack(coast_coor)[:, 0])
+        miny = np.min(np.vstack(coast_coor)[:, 1])
+        maxy = np.max(np.vstack(coast_coor)[:, 1])
+        
+        for c in coast_coor:
+            out = map_coordinates(c[:, 0], c[:, 1], x1, x2, y1, y2, minx, maxx, miny, maxy)
+            plt.plot(out[0], out[1], color = colors[jf], lw = 0.5)
+        
+        minx = np.min(np.vstack(coast_coor)[:, 0])
+        maxx = np.max(np.vstack(coast_coor)[:, 0])
+        miny = np.min(np.vstack(coast_coor)[:, 1])
+        maxy = np.max(np.vstack(coast_coor)[:, 1])
+        for c in count_coor:
+            out = map_coordinates(c[:, 0], c[:, 1], x1, x2, y1, y2, minx, maxx, miny, maxy)
+            plt.plot(out[0], out[1], color = colors[jf], lw = 0.5)
+        plt.plot((x1, x2, x2, x1, x1), (y1, y1, y2, y2, y1), lw = 1, color = colors[jf])
+
+        coords = map_coordinates(m(lon[-1], lat[-1])[0], m(lon[-1], lat[-1])[1], x1, x2, y1, y2, minx, maxx, miny, maxy )
+        plt.scatter(coords[0], coords[1], 10, marker = "o", color = "black", zorder = 1000)
+        plt.scatter(coords[0], coords[1], 5, marker = "o", color = "white", zorder = 1001)
+        plt.scatter(coords[0], coords[1], 1, marker = "o", color = "black", zorder = 1002)
+        
+        plt.xlim(0, 1)
+        plt.ylim(0, 1)
         plt.axis("off")
         plt.tight_layout()
     
      
    
 plt.subplots_adjust(hspace = 0.5)
-plt.suptitle( "Les " + str(round(len(filein)))  + " ascensions \"Hors Catégorie\" du Tour de France", 
-             fontsize = 60, fontname = "Titillium", color = [0.3, 0.3, 0.3])
-plt.subplots_adjust(top = 0.88)
+sup = plt.suptitle( "Hors Catégorie", fontsize = 180, fontname = fontname, color = [0.5, 0.5, 0.5])
+plt.subplots_adjust(top = 0.84)
 
 
-#plt.text(0.0, 0.0, "T", fontsize = 60, fontname = "Titillium")
+# Save figure
 plt.savefig("./figs/figall.png", dpi = 300)
 plt.savefig("./figs/figall.pdf"           )
-    #plt.savefig("./figs/" + f[:-4] + ".pdf")
-    
-#    plt.subplot(2, 2, 1)
-#    plt.scatter(x, y, 0.1)
-#    plt.xlabel("x [km]")
-#    plt.ylabel("y [km]")
-#    plt.grid()
-#    plt.title("Tracé")
-#    
-#    plt.subplot(2, 2, 2)
-#    plt.plot(d, z)
-#    plt.xlabel("d [km]")
-#    plt.ylabel("z [m]")
-#    plt.grid()
-#    plt.title("Profil")
-#    #plt.plot(d_fine, z_fine, "g")
-#    
-#    ax3d = fig.add_subplot(223, projection = '3d')
-#    ax3d.plot(x, y, z, "b")
-#    ax3d.set_xlabel("x [km]")
-#    ax3d.set_ylabel("y [km]")
-#    ax3d.set_zlabel("z [m]")
-#    
-#    plt.subplot(2, 2, 4)
-#    plt.hist(slope, bins = np.arange(-5, 20), density = False)
-#    plt.xlabel("Pente moyenne sur " + str(1000 * dd) + " m " + " [%]")
-#    plt.ylabel("Nombre de segments")
-#    plt.title("Distribution des pentes")
-#    plt.grid()
-#    #ax3d.plot(x, y, z, 'g')
-#    plt.tight_layout()
-#    plt.savefig("./fig.png", dpi = 500)
