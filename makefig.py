@@ -18,21 +18,13 @@ from   mpl_toolkits.mplot3d import Axes3D
 
 
 # Todo
-# -classer
-# - backer couleurs inadaptées
 # -police
 # -titre
 # limites inset?
-# une carte par col
+
 # Input files
 filein = [
           ["Col Agnel (depuis Casteldelfino)"                         ],
-          #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
-          #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
-          #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
-          #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
-          #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
-          #["", 0], ["", 0], ["", 0], ["", 0], ["", 0], ["", 0], 
           ["L'Alpe d'Huez (depuis Le Bourg-d'Oisans)"                 ],
           ["Andorre Arcalis (depuis Ordino)"                          ],
           ["Col d'Aubisque (depuis Argelès-Gazost)"                   ],
@@ -77,50 +69,55 @@ filein = [
          ]
 
 # Colors
-
-colors = [ "#F3D1DC",
-           "#F6A7C1",
-           "#FDCF76",   
-           "#B16E4B",
-           "#89AEB2",
-           "#97F2F3",
-           "#F1E0B0",
-           "#F1CDB0",
-           "#E7CFC8",
-           "#D2A3A9",
-           "#E6DCE5",
-           "#EBC3C1",
-           "#ECAD8F",
-           "#AF6E4E",
-           "#C8B4BA",
-           "#F3BBD3",
-           "#C1CD97",
-           "#E18D96",
-           "#909090",
-           "#38908F",
-           "#B2EBE0",
-           "#5E96AE",
-           "#FFBFA3",
-           "#E08963",
-           "#70AE98",
-           "#ECBE7A",
-           "#E58B88",
-           "#9DABDD",
-           "#D9EFFC",
-           "#F9E1E0",
-           "#FEADB9",
-           "#BC85A3",
-           "#9799BA",
-           "#BC85A3",
-           "#ADDDCE",
-           "#70AE98",
-           "#E6B655",
-           "#F0A35E",
-           "#CA7E8D",
-           "#8AC0DE",
-           "#F05CD5",
-           "#F5C9B2",
-         ]
+colors = [
+          "#6C1B72",
+          "#9016B2",
+          "#A24CC8",
+          "#9950B2",
+          "#A276CC",
+          "#C084DC",
+          
+          "#00496E",
+          "#00529B",
+          "#0067C6",
+          "#0076CC",
+          "#00A0E2",
+          "#40BDE8",
+          
+          "#006068",
+          "#006F7A",
+          "#008193",
+          "#0097AC",
+          "#36CCDA",
+          "#8EDBE5",
+          
+          "#006651",
+          "#007B63",
+          "#00B08B",
+          "#00C590",
+          "#3BD6B2",
+          "#81E0C7",
+          
+          "#E0CA00",
+          "#EADB1B",
+          "#EDE25E",
+          "#EEE88D",
+          "#EEEAA5",
+          "#EEEBB6",
+          
+          "#ED8000",
+          "#FF7200",
+          "#FF963B",
+          "#FFB754",
+          "#FDC87D",
+          "#FFB57B",
+          
+          "#F02233",
+          "#F9455B",
+          "#FF5B60",
+          "#FB6581",
+          "#FF818C",
+          "#FFB6B1",         ]
 #colors = [np.random.random(3) for i in range(len(filein))]
 
 # Font stuff
@@ -156,6 +153,12 @@ def difficulty_index(H, D, T):
         out += (T-1000)/100
     return out
 
+# Function used later to map a set of points to [0, 1[]]
+def map_coordinates(x, y, x1, x2, y1, y2, minx, maxx, miny, maxy):
+        xx = x1 + (x - minx) * (x2 - x1) / (maxx - minx)
+        yy = y1 + (y - miny) * (y2 - y1) / (maxy - miny)
+        return xx, yy
+            
 # Projection for map inset
 m = Basemap(llcrnrlon = -4 ,llcrnrlat = 41, urcrnrlon = 12.0 ,
             urcrnrlat = 47,
@@ -248,15 +251,8 @@ for file in enumerate(filein):
         score = difficulty_index((z[-1] - z[0]), (d[-1] - d[0]) * 1000.0, z[-1])
         
         # Plots
-        #plt.fill_between(d, z, color = colors[jf])
         plt.fill_between(d / d[-1], (z - z[0]) / (z[-1] - z[0]), color = colors[jf])
-        
-        #plt.ylim(0, 3000)
-        #plt.xlim(0, 30)#d[-1])
-        
-        
-        
-        #plt.text(0, 0, str(np.round(np.mean(slope), 1)) + "% (" + str(np.round(np.max(slope))) + "%)")
+
         plt.title(f.split(" (")[0] + "\n", color = colors[jf], 
                       fontname = fontname)
         
@@ -274,31 +270,28 @@ for file in enumerate(filein):
             va = "center", color = "white", fontname = fontname)
         
 
-        # Plot road in box. Scale depending on the dimension that has the largest span.
+        # Plot road in box. Scale data depending on the dimension that has 
+        # the largest span.
         # Box coordinates
-        x1, x2 = 0.3, 0.60
-        y1, y2 = 0.55, 0.85
-        
-        if np.abs(x[-1]) > np.abs(y[-1]):
+        x1, x2 = 0.1, 0.4
+        y1, y2 = 0.65, 0.95
+               
+        if np.max(x) - np.min(x) > np.max(y) - np.min(y):
             # Scale factor: along x so that when divided by this number we have x2 - x1
-            scalef = np.abs(x[-1]) / (x2 - x1)
+            scalef = (np.max(x) - np.min(x)) / (x2 - x1)
         else:
-            scalef = np.abs(y[-1]) / (y2 - y1)
+            scalef = (np.max(y) - np.min(y)) / (y2 - y1)
         
-        # Make mean of data pass through mean of box. 
-        xx = (x1 + x2) / 2.0 + x / scalef - np.sign(x[-1] - x[0]) * (x2 - x1) / 2
-        yy = (y1 + y2) / 2.0 + y / scalef - np.sign(y[-1] - y[0]) * (y2 - y1) / 2       
+        # Squeeze data and make mean of data pass through mean of box. 
+        xx = (x - np.mean(x)) / scalef  + (x2 - np.max((x - np.mean(x)) / scalef))   #(x1 + x2) / 2.0 + (x - x[0]) / scalef - np.sign(x[-1] - x[0]) * (x2 - x1) / 2
+        yy = (y - np.mean(y)) / scalef  + (y2 - np.max((y - np.mean(y)) / scalef))   #(y1 + y2) / 2.0 + (y - y[0]) / scalef - np.sign(y[-1] - y[0]) * (y2 - y1) / 2       
 
-        ha, va = "center", "center"
-        if np.abs(xx[0] - x1) < 1e-6:
+        ha, va = "left", "bottom"
+        if x[0] < x[-1]:
             ha = "right"
-        if np.abs(xx[0] - x2) < 1e-6:
-            ha = "left"
-        if np.abs(yy[0] - y1) < 1e-6:
+        if y[0] < y[-1]:
             va = "top"
-        if np.abs(yy[0] - y2) < 1e-6:
-            va = "bottom"
-
+            
         from_place = f.split(" (")[1].split(")")[0].split("depuis ")[1]
         plt.text(xx[0], yy[0], "\n " + from_place + " \n", color = colors[jf], 
                  fontsize = 4, ha = ha, va = va, fontname = fontname)
@@ -308,16 +301,12 @@ for file in enumerate(filein):
         plt.scatter(xx[-1], yy[-1], 5, marker = "o", color = "white", zorder = 1001)
         plt.scatter(xx[-1], yy[-1], 1, marker = "o", color = "black", zorder = 1002)
         
-        
         # Draw map and location
-        def map_coordinates(x, y, x1, x2, y1, y2, minx, maxx, miny, maxy):
-                xx = x1 + (x - minx) * (x2 - x1) / (maxx - minx)
-                yy = y1 + (y - miny) * (y2 - y1) / (maxy - miny)
-                return xx, yy
+
         x1 = 0.0
         x2 = 0.2
-        y1 = 0.4
-        y2 = 0.6
+        y1 = 0.35
+        y2 = 0.55
         minx = np.min(np.vstack(coast_coor)[:, 0])
         maxx = np.max(np.vstack(coast_coor)[:, 0])
         miny = np.min(np.vstack(coast_coor)[:, 1])
