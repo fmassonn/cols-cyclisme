@@ -14,7 +14,7 @@
   <type>Sortie à vélo</type>
   <trkseg>
    <trkpt lat="45.06418" lon="6.0389100000000004">
-    <ele>722.16</ele>
+    <ele>722.1700000000001</ele>
    </trkpt>
    <trkpt lat="45.06459500131737" lon="6.039469995865929">
     <ele>725.13</ele>
@@ -1387,23 +1387,8 @@
    <trkpt lat="45.09514" lon="6.069330000000001">
     <ele>1856.6000000000001</ele>
    </trkpt>
-   <trkpt lat="45.09575" lon="6.06944">
-    <ele>1856.14</ele>
-   </trkpt>
-   <trkpt lat="45.095800000000004" lon="6.06948">
-    <ele>1856.14</ele>
-   </trkpt>
-   <trkpt lat="45.09579" lon="6.069730000000001">
-    <ele>1855.69</ele>
-   </trkpt>
-   <trkpt lat="45.09581" lon="6.07">
-    <ele>1855.25</ele>
-   </trkpt>
-   <trkpt lat="45.09577" lon="6.07009">
-    <ele>1855.25</ele>
-   </trkpt>
-   <trkpt lat="45.09582" lon="6.07035">
-    <ele>1854.3100000000002</ele>
+   <trkpt lat="45.095690000000005" lon="6.069420000000001">
+    <ele>1856.03</ele>
    </trkpt>
   </trkseg>
  </trk>

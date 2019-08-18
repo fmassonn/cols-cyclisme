@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx creator="StravaGPX" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
  <metadata>
-  <name>Finhaut-Émosson (depuis Gietroz)</name>
+  <name>Finhaut-Émosson (depuis Giétroz)</name>
   <author>
    <name>François Massonnet</name>
    <link href="https://www.strava.com/athletes/17499584"/>
@@ -9,7 +9,7 @@
   <link href="https://www.strava.com/routes/20993799"/>
  </metadata>
  <trk>
-  <name>Finhaut-Émosson (depuis Gietroz)</name>
+  <name>Finhaut-Émosson (depuis Giétroz)</name>
   <link href="https://www.strava.com/routes/20993799"/>
   <type>Sortie à vélo</type>
   <trkseg>
@@ -857,16 +857,7 @@
     <ele>1977.1100000000001</ele>
    </trkpt>
    <trkpt lat="46.068940000000005" lon="6.937900000000001">
-    <ele>1979.65</ele>
-   </trkpt>
-   <trkpt lat="46.0686" lon="6.937360000000001">
-    <ele>1981.5900000000001</ele>
-   </trkpt>
-   <trkpt lat="46.06839" lon="6.936940000000001">
-    <ele>1981.8300000000002</ele>
-   </trkpt>
-   <trkpt lat="46.06814000000001" lon="6.936560000000001">
-    <ele>1976.5100000000002</ele>
+    <ele>1979.39</ele>
    </trkpt>
   </trkseg>
  </trk>

@@ -17,11 +17,6 @@ from   scipy import interpolate
 from   mpl_toolkits.mplot3d import Axes3D
 
 
-# Todo
-# -police
-# -titre
-# limites inset?
-
 # Input files
 filein = [
           ["Col Agnel (depuis Casteldelfino)"                         ],
@@ -36,7 +31,7 @@ filein = [
           ["Chamrousse (depuis Uriage-les-Bains)"                     ],
           ["Mont du Chat (depuis Yenne)"                              ],
           ["Col de la Croix-de-Fer (depuis Saint-Jean-de-Maurienne)"  ],
-          ["Finhaut-Émosson (depuis Gietroz)"                         ],
+          ["Finhaut-Émosson (depuis Giétroz)"                         ],
           ["Col du Galibier (depuis le Col du Lautaret)"              ],
           ["Col du Glandon (depuis le Barrage du Verney)"             ],
           ["Plateau des Glières (depuis Le-Petit-Bornand-les-Glières)"],
@@ -124,10 +119,17 @@ colors = [
 fontfile = "ERASLGHT"
 fontname = "Eras Light ITC"
 
+fontfilet = "GOTHIC"
+fontnamet = "Century Gothic"
+
 #fontfile = "Existence-Light"
 #fontname = "Existence Light"
+
 pyglet.font.add_file("./fonts/" + fontfile + ".ttf")
-font = pyglet.font.load(fontname)
+font = pyglet.font.load(fontname, bold = True)
+
+pyglet.font.add_file("./fonts/" + fontfilet + ".ttf")
+font = pyglet.font.load(fontnamet)
 
 # Define projection
 def projection(lon, lat):
@@ -160,8 +162,8 @@ def map_coordinates(x, y, x1, x2, y1, y2, minx, maxx, miny, maxy):
         return xx, yy
             
 # Projection for map inset
-m = Basemap(llcrnrlon = -4 ,llcrnrlat = 41, urcrnrlon = 12.0 ,
-            urcrnrlat = 47,
+m = Basemap(llcrnrlon = -5 ,llcrnrlat = 41, urcrnrlon = 12 ,
+            urcrnrlat = 51,
             projection='lcc',lat_1=43.5, lat_2=45.3, lon_0 = 2.4,
             resolution ='h', area_thresh=1000.)
 
@@ -174,7 +176,7 @@ count_coor = count.get_segments()
 plt.close("all")
 # Loop over files
     
-fig = plt.figure("figall", figsize = (20, 20))
+fig = plt.figure("figall", figsize = (48 / 2.54, 48 / 2.54), dpi = 600)
 for file in enumerate(filein):
     id = file[0] + 1
     jf = file[0]
@@ -273,7 +275,7 @@ for file in enumerate(filein):
         # Plot road in box. Scale data depending on the dimension that has 
         # the largest span.
         # Box coordinates
-        x1, x2 = 0.1, 0.4
+        x1, x2 = 0.0, 0.3
         y1, y2 = 0.65, 0.95
                
         if np.max(x) - np.min(x) > np.max(y) - np.min(y):
@@ -293,18 +295,20 @@ for file in enumerate(filein):
             va = "top"
             
         from_place = f.split(" (")[1].split(")")[0].split("depuis ")[1]
-        plt.text(xx[0], yy[0], "\n " + from_place + " \n", color = colors[jf], 
+        from_place = from_place[0].upper() + from_place[1:]
+        x_txt = xx[0] + (xx[0] - xx[-1]) * 0.15
+        y_txt = yy[0] + (yy[0] - yy[-1]) * 0.15
+        plt.text(x_txt, y_txt, from_place, color = colors[jf], 
                  fontsize = 4, ha = ha, va = va, fontname = fontname)
-        plt.plot(xx, yy, lw = 1, color = colors[jf])
+        plt.plot(xx, yy, lw = 0.5, color = colors[jf])
         plt.scatter(xx[0], yy[0], 5, marker = "o", color = colors[jf], zorder = 1000)
         plt.scatter(xx[-1], yy[-1], 10, marker = "o", color = "black", zorder = 1000)
         plt.scatter(xx[-1], yy[-1], 5, marker = "o", color = "white", zorder = 1001)
         plt.scatter(xx[-1], yy[-1], 1, marker = "o", color = "black", zorder = 1002)
         
         # Draw map and location
-
         x1 = 0.0
-        x2 = 0.2
+        x2 = 0.13
         y1 = 0.35
         y2 = 0.55
         minx = np.min(np.vstack(coast_coor)[:, 0])
@@ -314,7 +318,7 @@ for file in enumerate(filein):
         
         for c in coast_coor:
             out = map_coordinates(c[:, 0], c[:, 1], x1, x2, y1, y2, minx, maxx, miny, maxy)
-            plt.plot(out[0], out[1], color = colors[jf], lw = 0.5)
+            plt.plot(out[0], out[1], color = colors[jf], lw = 0.2)
         
         minx = np.min(np.vstack(coast_coor)[:, 0])
         maxx = np.max(np.vstack(coast_coor)[:, 0])
@@ -322,26 +326,26 @@ for file in enumerate(filein):
         maxy = np.max(np.vstack(coast_coor)[:, 1])
         for c in count_coor:
             out = map_coordinates(c[:, 0], c[:, 1], x1, x2, y1, y2, minx, maxx, miny, maxy)
-            plt.plot(out[0], out[1], color = colors[jf], lw = 0.5)
-        plt.plot((x1, x2, x2, x1, x1), (y1, y1, y2, y2, y1), lw = 1, color = colors[jf])
+            plt.plot(out[0], out[1], color = colors[jf], lw = 0.2)
+        #plt.plot((x1, x2, x2, x1, x1), (y1, y1, y2, y2, y1), lw = 1, color = colors[jf])
 
         coords = map_coordinates(m(lon[-1], lat[-1])[0], m(lon[-1], lat[-1])[1], x1, x2, y1, y2, minx, maxx, miny, maxy )
         plt.scatter(coords[0], coords[1], 10, marker = "o", color = "black", zorder = 1000)
         plt.scatter(coords[0], coords[1], 5, marker = "o", color = "white", zorder = 1001)
         plt.scatter(coords[0], coords[1], 1, marker = "o", color = "black", zorder = 1002)
         
-        plt.xlim(0, 1)
-        plt.ylim(0, 1)
+        #plt.xlim(0, 1)
+        #plt.ylim(0, 1)
         plt.axis("off")
         plt.tight_layout()
     
      
    
 plt.subplots_adjust(hspace = 0.5)
-sup = plt.suptitle( "Hors Catégorie", fontsize = 180, fontname = fontname, color = [0.5, 0.5, 0.5])
-plt.subplots_adjust(top = 0.84)
+sup = plt.suptitle( "HORS CATÉGORIE", fontsize = 150, fontname = fontnamet, color = [0.0, 0.0, 0.0])
+plt.subplots_adjust(top = 0.82)
 
 
 # Save figure
-plt.savefig("./figs/figall.png", dpi = 300)
-plt.savefig("./figs/figall.pdf"           )
+plt.savefig("./figs/figall.png")
+plt.savefig("./figs/figall.pdf")
