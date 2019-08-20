@@ -117,7 +117,7 @@ colors = [
 
 # Font stuff
 fontfile = "ERASLGHT"
-fontname = "Eras Light ITC"
+fontname = "Eras Medium ITC"
 
 fontfilet = "GOTHIC"
 fontnamet = "Century Gothic"
@@ -296,8 +296,8 @@ for file in enumerate(filein):
             
         from_place = f.split(" (")[1].split(")")[0].split("depuis ")[1]
         from_place = from_place[0].upper() + from_place[1:]
-        x_txt = xx[0] + (xx[0] - xx[-1]) * 0.15
-        y_txt = yy[0] + (yy[0] - yy[-1]) * 0.15
+        x_txt = xx[0] + (xx[0] - xx[-1]) * 0.1
+        y_txt = yy[0] + (yy[0] - yy[-1]) * 0.1
         plt.text(x_txt, y_txt, from_place, color = colors[jf], 
                  fontsize = 4, ha = ha, va = va, fontname = fontname)
         plt.plot(xx, yy, lw = 0.5, color = colors[jf])
@@ -342,7 +342,7 @@ for file in enumerate(filein):
      
    
 plt.subplots_adjust(hspace = 0.5)
-sup = plt.suptitle( "HORS CATÉGORIE", fontsize = 150, fontname = fontnamet, color = [0.0, 0.0, 0.0])
+sup = plt.suptitle( "HORS CATÉGORIE", fontsize = 155, fontname = fontnamet, color = [0.0, 0.0, 0.0])
 plt.subplots_adjust(top = 0.82)
 
 
