@@ -113,6 +113,9 @@ colors = [
           "#FB6581",
           "#FF818C",
           "#FFB6B1",         ]
+
+# Rearrange colors by row
+colors = [c for j in range(7) for c in colors[j::6]]
 #colors = [np.random.random(3) for i in range(len(filein))]
 
 # Font stuff
@@ -176,11 +179,11 @@ count_coor = count.get_segments()
 plt.close("all")
 # Loop over files
     
-fig = plt.figure("figall", figsize = (48 / 2.54, 48 / 2.54), dpi = 600)
+fig = plt.figure("figall", figsize = (39 / 2.54 , 29 / 2.54), dpi = 600)
 for file in enumerate(filein):
     id = file[0] + 1
     jf = file[0]
-    plt.subplot(7, 6, id)
+    plt.subplot(6, 7, id)
 
 
     if not os.path.exists("./data/" + file[1][0] + ".gpx"):
@@ -259,24 +262,24 @@ for file in enumerate(filein):
                       fontname = fontname)
         
         plt.text(0.92, 0.5,  str(int((z[-1] - z[0]))) + " m ", 
-                 color = "white", rotation = 90, va = "center", fontname = fontname)
+                 color = "white", rotation = 90, va = "center", fontname = fontname, fontsize = 6)
         plt.text(0.5, 0.02, str(np.round(d[-1], 1)) +
-                 " km", color = "white", ha = "center", fontname = fontname)
+                 " km", color = "white", ha = "center", fontname = fontname, fontsize = 6)
         plt.text(1.0, 1.0,  " " + str(int(z[-1])) + " m", 
-                 color = colors[jf], ha = "left", fontname = fontname)
+                 color = colors[jf], ha = "left", fontname = fontname, fontsize = 6)
         plt.text(0.0, 0.0,  str(int(z[0])) + " m ", 
-                 color = colors[jf], ha = "right", fontname = fontname)
+                 color = colors[jf], ha = "right", fontname = fontname, fontsize = 6)
         plt.text(0.7, 0.3,  str(np.round((z[-1] - z[0]) / 
                                          ((d[-1] - d[0]) * 1000) * 100, 1)) + 
             " %", rotation = 45, ha = "center", 
-            va = "center", color = "white", fontname = fontname)
+            va = "center", color = "white", fontname = fontname, fontsize = 6   )
         
 
         # Plot road in box. Scale data depending on the dimension that has 
         # the largest span.
         # Box coordinates
-        x1, x2 = 0.0, 0.3
-        y1, y2 = 0.65, 0.95
+        x1, x2 = -0.10, 0.2
+        y1, y2 = 0.7, 1.0
                
         if np.max(x) - np.min(x) > np.max(y) - np.min(y):
             # Scale factor: along x so that when divided by this number we have x2 - x1
@@ -288,28 +291,45 @@ for file in enumerate(filein):
         xx = (x - np.mean(x)) / scalef  + (x2 - np.max((x - np.mean(x)) / scalef))   #(x1 + x2) / 2.0 + (x - x[0]) / scalef - np.sign(x[-1] - x[0]) * (x2 - x1) / 2
         yy = (y - np.mean(y)) / scalef  + (y2 - np.max((y - np.mean(y)) / scalef))   #(y1 + y2) / 2.0 + (y - y[0]) / scalef - np.sign(y[-1] - y[0]) * (y2 - y1) / 2       
 
-        ha, va = "left", "bottom"
-        if x[0] < x[-1]:
+        ha = "center"
+        va = "center"
+        
+        if x[-1] - np.mean(x) > 0:
             ha = "right"
-        if y[0] < y[-1]:
+        elif x[-1] - np.mean(x) <= 0:
+            ha = "left"
+            
+        if y[-1] - np.mean(y) < 0:
+            va = "bottom"
+        elif y[-1] - np.mean(y) >=0 :
             va = "top"
+            
+
             
         from_place = f.split(" (")[1].split(")")[0].split("depuis ")[1]
         from_place = from_place[0].upper() + from_place[1:]
-        x_txt = xx[0] + (xx[0] - xx[-1]) * 0.1
-        y_txt = yy[0] + (yy[0] - yy[-1]) * 0.1
+        if from_place == "Saint-Etienne-de-Tinée" or  \
+                from_place == "Lanslebourg-Mont-Cenis" or \
+                from_place == "Le Barrage du Verney":
+
+            ha = "center"
+
+        x_txt = xx[0] + np.sign(xx[0] - np.mean(xx)) * (x2 - x1) * 0.1
+        y_txt = yy[0] + np.sign(yy[0] - np.mean(yy)) * (y2 - y1) * 0.1
         plt.text(x_txt, y_txt, from_place, color = colors[jf], 
                  fontsize = 4, ha = ha, va = va, fontname = fontname)
         plt.plot(xx, yy, lw = 0.5, color = colors[jf])
-        plt.scatter(xx[0], yy[0], 5, marker = "o", color = colors[jf], zorder = 1000)
-        plt.scatter(xx[-1], yy[-1], 10, marker = "o", color = "black", zorder = 1000)
-        plt.scatter(xx[-1], yy[-1], 5, marker = "o", color = "white", zorder = 1001)
-        plt.scatter(xx[-1], yy[-1], 1, marker = "o", color = "black", zorder = 1002)
+        plt.scatter(xx[0], yy[0], 2, marker = "o", color = colors[jf], 
+                    zorder = 1000)
+        plt.scatter(xx[-1], yy[-1], 4, marker = "o", color = "black", 
+                    zorder = 1000, facecolors = "none", lw = 0.4)
+        plt.scatter(xx[-1], yy[-1], 0.3, marker = "o", color = "black", 
+                    zorder = 1001, lw = 0.3)
         
         # Draw map and location
-        x1 = 0.0
-        x2 = 0.13
-        y1 = 0.35
+        x1 = - 0.2
+        x2 = 0.1
+        y1 = 0.2    
         y2 = 0.55
         minx = np.min(np.vstack(coast_coor)[:, 0])
         maxx = np.max(np.vstack(coast_coor)[:, 0])
@@ -327,23 +347,22 @@ for file in enumerate(filein):
         for c in count_coor:
             out = map_coordinates(c[:, 0], c[:, 1], x1, x2, y1, y2, minx, maxx, miny, maxy)
             plt.plot(out[0], out[1], color = colors[jf], lw = 0.2)
-        #plt.plot((x1, x2, x2, x1, x1), (y1, y1, y2, y2, y1), lw = 1, color = colors[jf])
 
         coords = map_coordinates(m(lon[-1], lat[-1])[0], m(lon[-1], lat[-1])[1], x1, x2, y1, y2, minx, maxx, miny, maxy )
-        plt.scatter(coords[0], coords[1], 10, marker = "o", color = "black", zorder = 1000)
-        plt.scatter(coords[0], coords[1], 5, marker = "o", color = "white", zorder = 1001)
-        plt.scatter(coords[0], coords[1], 1, marker = "o", color = "black", zorder = 1002)
+        plt.scatter(coords[0], coords[1], 4, marker = "o", color = "black", 
+                    zorder = 1000, facecolors = "none", lw = 0.4)
+        plt.scatter(coords[0], coords[1], 0.3, marker = "o", color = "black", 
+                    zorder = 1001, lw = 0.3)
         
-        #plt.xlim(0, 1)
-        #plt.ylim(0, 1)
+
         plt.axis("off")
         plt.tight_layout()
     
      
    
-plt.subplots_adjust(hspace = 0.5)
-sup = plt.suptitle( "HORS CATÉGORIE", fontsize = 155, fontname = fontnamet, color = [0.0, 0.0, 0.0])
-plt.subplots_adjust(top = 0.82)
+plt.subplots_adjust(hspace = 0.6)
+sup = plt.suptitle( "HORS CATÉGORIE", fontsize = 122, fontname = fontnamet, color = [0.0, 0.0, 0.0])
+plt.subplots_adjust(top = 0.80)
 
 
 # Save figure
