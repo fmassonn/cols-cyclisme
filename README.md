@@ -3,7 +3,8 @@
 How to add a new climb?
   1. Create a strava itinerary
   2. Export as GPX
-  3. Place in ./data/ 
+  3. Place in ./data/
+  4. Add to "filein" list variable in script
 
  
 Routes are chosen starting from the lowest point (river) nearby or according to websites. 
@@ -139,7 +140,5 @@ Val Thorens
 Mont Ventoux
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2016
 	https://www.cols-cyclisme.com/provence/france/mont-ventoux-depuis-bedoin-c34.htm
-
-
 
 See also: https://www.velofute.com/les-cols-hc	
