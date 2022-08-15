@@ -12,10 +12,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pyglet
-from   mpl_toolkits.basemap import Basemap
+
 from   scipy import interpolate
 from   mpl_toolkits.mplot3d import Axes3D
 
+import cartopy.crs as ccrs
+import cartopy.feature as cf
 
 # Input files
 filein = [
@@ -136,16 +138,29 @@ font = pyglet.font.load(fontnamet)
 
 # Define projection
 def projection(lon, lat):
+    
+    """
+    lat and lon in degrees
+    Converts a path expressed as two 1-d arrays of lon and lat into a path
+    expressed as  two 1-d arrays of x and y
+    
+    """
+    lat0 = 46.8473939
+    lon0 = 3.0766819
+    
+
+    a = 6356000 # Earth radius
+    
+        
     lon = np.array(lon)
     lat = np.array(lat)
-    m = Basemap(width=12000000,height=9000000,
-            rsphere=(6378137.00,6356752.3142),\
-            resolution='l',area_thresh=1000.,projection='lcc',\
-            lat_1=45.,lat_0=51.0,lon_0=4.0)
     
-    x, y = m(lon, lat)
+    x = np.pi / 180 * (lon - lon0) * a * np.cos(lat * np.pi / 180)
+    y = a * np.pi / 180 * (lat - lat0) 
+     
     
-    return (x - x[0]) / 1e3, (y - y[0]) / 1e3
+    
+    return x / 1e3 , y / 1e3
 
 
 def difficulty_index(H, D, T):
@@ -164,21 +179,13 @@ def map_coordinates(x, y, x1, x2, y1, y2, minx, maxx, miny, maxy):
         yy = y1 + (y - miny) * (y2 - y1) / (maxy - miny)
         return xx, yy
             
-# Projection for map inset
-m = Basemap(llcrnrlon = -5 ,llcrnrlat = 41, urcrnrlon = 12 ,
-            urcrnrlat = 51,
-            projection='lcc',lat_1=43.5, lat_2=45.3, lon_0 = 2.4,
-            resolution ='h', area_thresh=1000.)
 
-# Get coastlines and countries
-coast =      m.drawcoastlines()
-coast_coor = coast.get_segments()
-count =      m.drawcountries()
-count_coor = count.get_segments()
 
 plt.close("all")
 # Loop over files
-    
+
+myStats = list() # Will contain data for plotting difficulty etc.
+
 fig = plt.figure("figall", figsize = (39 / 2.54 , 29 / 2.54), dpi = 600)
 for file in enumerate(filein):
     id = file[0] + 1
@@ -215,7 +222,7 @@ for file in enumerate(filein):
         x, y = projection(lon, lat)
         # Convert elevation to array
         z = np.array(z)
-        
+   
         
         # Smooth
         #neighb = d[1:] - d[:-1]
@@ -230,7 +237,7 @@ for file in enumerate(filein):
                                                np.diff(y     ) ** 2)))
         #d_fine = np.append([0.0], np.cumsum(np.sqrt(np.diff(x_fine) ** 2 + np.diff(y_fine) ** 2)))
         #sl_fine = np.diff(z_fine) / np.diff(d_fine * 1000.0) * 100.0
-        
+
         # Compute slopes, per dd horizontal steps
         slope = list()
         
@@ -254,6 +261,8 @@ for file in enumerate(filein):
         slope = np.array(slope)
         
         score = difficulty_index((z[-1] - z[0]), (d[-1] - d[0]) * 1000.0, z[-1])
+        
+        myStats.append([f.split(" (")[0], z[-1] - z[0], (d[-1] - d[0]) * 1000.0, z[-1], score])
         
         # Plots
         plt.fill_between(d / d[-1], (z - z[0]) / (z[-1] - z[0]), color = colors[jf])
@@ -326,39 +335,25 @@ for file in enumerate(filein):
         plt.scatter(xx[-1], yy[-1], 0.3, marker = "o", color = "black", 
                     zorder = 1001, lw = 0.3)
         
-        # Draw map and location
-        x1 = - 0.2
-        x2 = 0.1
-        y1 = 0.2    
-        y2 = 0.55
-        minx = np.min(np.vstack(coast_coor)[:, 0])
-        maxx = np.max(np.vstack(coast_coor)[:, 0])
-        miny = np.min(np.vstack(coast_coor)[:, 1])
-        maxy = np.max(np.vstack(coast_coor)[:, 1])
-        
-        for c in coast_coor:
-            out = map_coordinates(c[:, 0], c[:, 1], x1, x2, y1, y2, minx, maxx, miny, maxy)
-            plt.plot(out[0], out[1], color = colors[jf], lw = 0.2)
-        
-        minx = np.min(np.vstack(coast_coor)[:, 0])
-        maxx = np.max(np.vstack(coast_coor)[:, 0])
-        miny = np.min(np.vstack(coast_coor)[:, 1])
-        maxy = np.max(np.vstack(coast_coor)[:, 1])
-        for c in count_coor:
-            out = map_coordinates(c[:, 0], c[:, 1], x1, x2, y1, y2, minx, maxx, miny, maxy)
-            plt.plot(out[0], out[1], color = colors[jf], lw = 0.2)
 
-        coords = map_coordinates(m(lon[-1], lat[-1])[0], m(lon[-1], lat[-1])[1], x1, x2, y1, y2, minx, maxx, miny, maxy )
-        plt.scatter(coords[0], coords[1], 4, marker = "o", color = "black", 
-                    zorder = 1000, facecolors = "none", lw = 0.4)
-        plt.scatter(coords[0], coords[1], 0.3, marker = "o", color = "black", 
-                    zorder = 1001, lw = 0.3)
         
 
+
+
+        # ax = plt.axes(projection = ccrs.LambertConformal(central_longitude=3.0, \
+        #                                                  central_latitude=43.0,\
+        #                 false_easting=0.0, false_northing=0.0, secant_latitudes=None, \
+        #                     standard_parallels=None, globe=None, cutoff=-30))
+        # ax.set_extent([-5, 10, 42, 52])
+        # ax.add_feature(cf.COASTLINE)
+        # ax.add_feature(cf.BORDERS)
+        
+        #ax.set_xlim(0.0, 5.0)
         plt.axis("off")
         plt.tight_layout()
     
      
+        
    
 plt.subplots_adjust(hspace = 0.6)
 sup = plt.suptitle( "HORS CATÉGORIE", fontsize = 122, fontname = fontnamet, color = [0.0, 0.0, 0.0])
@@ -368,3 +363,31 @@ plt.subplots_adjust(top = 0.80)
 # Save figure
 plt.savefig("./figs/figall.png")
 plt.savefig("./figs/figall.pdf")
+
+
+
+# Produce some stats
+fig, ax = plt.subplots(1, 1, figsize = (4, 4))
+for j, m in enumerate(myStats):
+  ax.scatter(m[2] / 1e3, m[1], m[3] - 1500 , marker = ".", alpha = 0.5, color = colors[j])
+  ax.text(m[2] / 1e3, m[1], m[0].split(" ")[-1], ha = "center", va = "center", fontsize = 4)
+ax.set_xlim(0.0, 40.0)
+ax.set_ylim(0.0, 2000)
+ax.set_xlabel("Longueur (km)")
+ax.set_ylabel("Altitude arrivée (m)")
+fig.savefig("./figs/stats.png", dpi = 300)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

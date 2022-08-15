@@ -5,10 +5,10 @@ How to add a new climb?
   2. Export as GPX
   3. Place in ./data/ 
 
-  
+ 
 Routes are chosen starting from the lowest point (river) nearby or according to websites. 
  
-The routes are the ones of the last climb from the Tour de France.
+The routes are the ones of the last climb from the Tour de France as of 2020
 
 Paste colors: https://visme.co/blog/pastel-colors/
 
@@ -139,4 +139,7 @@ Val Thorens
 Mont Ventoux
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2016
 	https://www.cols-cyclisme.com/provence/france/mont-ventoux-depuis-bedoin-c34.htm
-	
+
+
+
+See also: https://www.velofute.com/les-cols-hc	
