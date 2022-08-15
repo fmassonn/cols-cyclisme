@@ -3,7 +3,8 @@
 How to add a new climb?
   1. Create a strava itinerary
   2. Export as GPX
-  3. Place in ./data/ 
+  3. Place in ./data/
+  4. Add to "filein" list variable in script
 
   
 Routes are chosen starting from the lowest point (river) nearby or according to websites. 
