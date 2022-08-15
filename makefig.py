@@ -48,6 +48,7 @@ filein = [
           ["Port de Larrau (depuis l'Auberge Logibar)"                ],
           ["La Ruchère en Chartreuse (depuis Saint-Christophe-sur-Guiers)"],
           ["Col de la Lombarde (depuis Pratolungo)"                   ],
+          ["Col de la Loze (depuis Brides-les-Bains)"                 ],    
           ["Luz-Ardiden (depuis Luz-Saint-Sauveur)"                   ],
           ["Col de la Madeleine (depuis Feissonnet)"                  ],
           ["Col du Mont-Cenis (depuis Susa)"                          ],
@@ -190,7 +191,7 @@ fig = plt.figure("figall", figsize = (39 / 2.54 , 29 / 2.54), dpi = 600)
 for file in enumerate(filein):
     id = file[0] + 1
     jf = file[0]
-    plt.subplot(6, 7, id)
+    plt.subplot(7, 7, id)
 
 
     if not os.path.exists("./data/" + file[1][0] + ".gpx"):
@@ -367,14 +368,39 @@ plt.savefig("./figs/figall.pdf")
 
 
 # Produce some stats
-fig, ax = plt.subplots(1, 1, figsize = (4, 4))
+fig, ax = plt.subplots(1, 2, figsize = (8, 4))
 for j, m in enumerate(myStats):
-  ax.scatter(m[2] / 1e3, m[1], m[3] - 1500 , marker = ".", alpha = 0.5, color = colors[j])
-  ax.text(m[2] / 1e3, m[1], m[0].split(" ")[-1], ha = "center", va = "center", fontsize = 4)
-ax.set_xlim(0.0, 40.0)
-ax.set_ylim(0.0, 2000)
-ax.set_xlabel("Longueur (km)")
-ax.set_ylabel("Altitude arrivée (m)")
+  ax[0].scatter(m[2] / 1e3, m[1], m[3] - 1100 , marker = ".", alpha = 0.5, color = colors[j])
+  ax[0].text(m[2] / 1e3, m[1], m[0].replace(" ", "\n"), ha = "center", va = "center", fontsize = 3)
+
+
+# Plot avg slope
+for slope in [4, 5, 6, 7, 8, 9, 10]:
+    ax[0].plot((0, 100), (0, slope * 1000), color = [0.8, 0.8, 0.8], linestyle = ":", lw = 1, zorder = 0)
+    
+    R = 7
+    
+    ax[0].text(R * np.cos(np.arctan(slope / 100)),  \
+            1000 * R * np.sin(np.arctan(slope / 100)), str(slope) + " %", fontsize = 6,\
+                color = [0.5, 0.5, 0.5], ha = "center", va = "center")
+ax[0].set_xlim(0.0, 40.0)
+ax[0].set_ylim(0.0, 2000)
+ax[0].set_xlabel("Longueur (km)")
+ax[0].set_ylabel("Dénivelé (m)")
+
+
+# Plot difficulty index sorted
+myStats_sorted = sorted(myStats, key = lambda x: x[4], reverse = False)
+
+
+for j, m in enumerate(myStats_sorted):
+    ax[1].plot((0, m[4]), (j, j), lw = 5)
+    ax[1].text(180, j, m[0], fontsize = 6, va = "center")
+
+ax[1].set_title("Score difficulté")
+ax[1].set_xlim(0.0, 300)
+
+fig.tight_layout()
 fig.savefig("./figs/stats.png", dpi = 300)
 
 
