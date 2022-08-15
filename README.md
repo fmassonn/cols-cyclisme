@@ -6,10 +6,14 @@ How to add a new climb?
   3. Place in ./data/
   4. Add to "filein" list variable in script
 
- 
+Criteria of selection:
+1/ The list of climbs is taken from the Wikipedia page above.
+2/ Since the same summit may have been climbed from various starting points on different years, the most recent HC climb is retained.
+
+Example: if we are in 2006, and the Mont Ventoux is climbed from Sault (Cat. 1) in 2005 but from Bédoin (HC) in 2003, then the 2003 instance is retained
+
+
 Routes are chosen starting from the lowest point (river) nearby or according to websites. 
- 
-The routes are the ones of the last climb from the Tour de France as of 2020
 
 Paste colors: https://visme.co/blog/pastel-colors/
 
@@ -19,14 +23,14 @@ Col Agnel
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2011
 	https://www.cols-cyclisme.com/queyras/italie/col-agnel-depuis-casteldelfino-c117.htm
 L'Alpe d'Huez	
-	https://fr.m.wikipedia.org/wiki/12e_%C3%A9tape_du_Tour_de_France_2018
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2022
 	https://www.climbbybike.com/climb.asp?Col=Alpe-dHuez&qryMountainID=5
 Andorre Arcalis
 	https://www.climbbybike.com/climb.asp?Col=Arcalis&qryMountainID=3926 (arrivée trop haut)
 	https://www.cols-cyclisme.com/pyrenees-centrales/andorre/station-d-arcalis-depuis-ordino-c1155.htm
 Col d'Aubisque
-	https://fr.m.wikipedia.org/wiki/19e_%C3%A9tape_du_Tour_de_France_2018
-	! Bug Strava ! 
+	https://fr.m.wikipedia.org/wiki/18e_%C3%A9tape_du_Tour_de_France_2022
+	https://www.cols-cyclisme.com/pyrenees-centrales/france/col-d-aubisque-depuis-laruns-c13.htm
 Port de Balès
 	https://fr.wikipedia.org/wiki/12e_%C3%A9tape_du_Tour_de_France_20177
 	https://www.climbbybike.com/climb.asp?Col=Port-de-Bales&qryMountainID=7057
@@ -49,14 +53,14 @@ Mont du Chat
 	https://fr.m.wikipedia.org/wiki/9e_%C3%A9tape_du_Tour_de_France_2017
 	https://www.cols-cyclisme.com/jura/france/mont-du-chat-depuis-yenne-c143.htm
 Col de la Croix-de-Fer
-	https://fr.m.wikipedia.org/wiki/12e_%C3%A9tape_du_Tour_de_France_2018
+	https://fr.m.wikipedia.org/wiki/12e_%C3%A9tape_du_Tour_de_France_2022
 	https://www.cols-cyclisme.com/arves-et-grandes-rousses/france/col-de-la-croix-de-fer-depuis-saint-jean-de-maurienne-c40.htm
 Finhaut-Émosson
 	https://fr.m.wikipedia.org/wiki/17e_%C3%A9tape_du_Tour_de_France_2016
 	https://www.cols-cyclisme.com/massif-du-mont-blanc/suisse/barrage-d-emosson-depuis-le-chatelard-c727.htm
 Col du Galibier
-	https://fr.m.wikipedia.org/wiki/Tour_de_France_2019
-	https://www.cols-cyclisme.com/arves-et-grandes-rousses/france/col-du-galibier-depuis-col-du-lautaret-c36.htm
+	https://fr.wikipedia.org/wiki/11e_%C3%A9tape_du_Tour_de_France_2022
+	https://www.climbbybike.com/fr/col/Col-du-Galibier/20736
 Col du Glandon
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2015
 	https://www.cols-cyclisme.com/arves-et-grandes-rousses/france/col-du-glandon-depuis-barrage-du-verney-c45.htm
@@ -69,10 +73,10 @@ Col du Grand-Saint-Bernard
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2009
 	https://www.cols-cyclisme.com/alpes-valaisannes/suisse/col-du-grand-saint-bernard-depuis-sembrancher-c146.htm
 Col du Granon
-	https://fr.m.wikipedia.org/wiki/Tour_de_France_1986
+	https://fr.m.wikipedia.org/wiki/11e_%C3%A9tape_du_Tour_de_France_2022
 	https://www.cols-cyclisme.com/cerces/france/col-du-granon-depuis-briancon-c122.htm
 Hautacam
-	https://fr.wikipedia.org/wiki/18e_%C3%A9tape_du_Tour_de_France_2014
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2022
 	https://www.cols-cyclisme.com/pyrenees-centrales/france/station-d-hautacam-depuis-argeles-gazost-c58.htm
 Col de l'Iseran
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2019
@@ -97,8 +101,11 @@ La Ruchère en Chartreuse
 Col de la Lombarde
 	https://fr.m.wikipedia.org/wiki/16e_%C3%A9tape_du_Tour_de_France_2008
 	https://www.cols-cyclisme.com/mercantour/italie/col-de-la-lombarde-depuis-pratolungo-c353.htm
+Col de la Loze
+	https://fr.wikipedia.org/wiki/17e_%C3%A9tape_du_Tour_de_France_2020
+	https://www.cols-cyclisme.com/vanoise/france/col-de-la-loze-depuis-brides-les-bains-c3612.htm
 Luz-Ardiden
-	https://fr.m.wikipedia.org/wiki/12e_%C3%A9tape_du_Tour_de_France_2011
+	https://fr.m.wikipedia.org/wiki/18e_%C3%A9tape_du_Tour_de_France_2021
 	https://www.cols-cyclisme.com/pyrenees-centrales/france/station-de-luz-ardiden-depuis-luz-saint-sauveur-c61.htm
 Col de la Madeleine
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2018
@@ -132,7 +139,7 @@ Superbagnères
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_1986
 	https://www.cols-cyclisme.com/pyrenees-centrales/france/station-de-superbagneres-depuis-bagneres-de-luchon-c538.htm
 Col du Tourmalet
-	https://fr.m.wikipedia.org/wiki/14e_%C3%A9tape_du_Tour_de_France_2019
+	https://fr.m.wikipedia.org/wiki/Tour_de_France_2021
 	https://www.cols-cyclisme.com/pyrenees-centrales/france/col-du-tourmalet-depuis-luz-saint-sauveur-c65.htm
 Val Thorens
 	https://fr.m.wikipedia.org/wiki/Tour_de_France_2019
